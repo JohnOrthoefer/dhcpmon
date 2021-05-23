@@ -1,0 +1,20 @@
+<table id="DHCPLeases" class="table table-striped" style="width:90%">
+  <thead>
+    <tr>
+      <th>IP</th>
+      <th>Name</th>
+      <th>MAC</th>
+      <th>Expire</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{range .}}
+    <tr>
+      <td>{{.IP}}</td>
+      <td>{{.Name}}</td>
+      <td>{{.MAC}}</td>
+      <td>{{.Expire}}</td>
+    </tr>
+    {{end}}
+  </tbody>
+</table>

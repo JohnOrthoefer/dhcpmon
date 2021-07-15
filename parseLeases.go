@@ -21,13 +21,6 @@ type DHCPEntry struct {
 
 var dhcpLeases []DHCPEntry
 
-// check(err, leasesFile)
-func check(e error, s string) {
-   if e != nil {
-      log.Fatalf("%s %v", s, e)
-   }
-}
-
 func GetLeases() []DHCPEntry {
    for i, ent := range dhcpLeases {
       dhcpLeases[i].Remain = time.Until(ent.Expire).Truncate(time.Second)

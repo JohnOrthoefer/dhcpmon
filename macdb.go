@@ -31,11 +31,13 @@ func getCompany(i *OuiEntry) string {
 }
 
 func lookupMac(mac string) *OuiEntry {
-	mac = strings.ToUpper(mac[0:8])
-	val, ok := cache[mac]
-	if ok {
-		return val
-	}
+	mac = strings.ToUpper(mac)
+    for i := len(mac); i >= 0; i-- {
+        val, ok := cache[mac[0:i]]
+        if ok {
+	        return val
+	    }
+    }
 
     if mac[1] == '2' ||
        mac[1] == '6' ||
@@ -52,8 +54,8 @@ func lookupMac(mac string) *OuiEntry {
    for scanner.Scan() {
       ln := scanner.Bytes()
       json.Unmarshal(ln, &v)
-      prefix := strings.ToUpper(v.OUI[0:8])
-      if prefix == mac {
+      prefix := strings.ToUpper(v.OUI)
+      if prefix == mac[0:len(prefix)] {
          cache[prefix] = v
          return v
       }
@@ -73,7 +75,7 @@ func initMacs(db string) error {
 func init() {
 	cache = make(OuiTable)
     cache["UNKNOWN"] = &OuiEntry{
-        OUI:        "00:00:00",
+        OUI:        "00:00:00:00:00:00",
         Private:    false,
         Company:    "UNKNOWN",
         Address:    "UNKNOWN",
@@ -83,7 +85,7 @@ func init() {
         Updated:    "",
     }
     cache["PRIVATE"] = &OuiEntry{
-        OUI:        "00:00:00",
+        OUI:        "00:00:00:00:00:00",
         Private:    true,
         Company:    "Privacy Mac",
         Address:    "UNKNOWN",
@@ -94,4 +96,4 @@ func init() {
     }
 }
 
-// vim: noai:ts=4:sw=4
+// vim: noai:ts=4:sw=4:set expandtab:

@@ -1,4 +1,6 @@
 dhcpmon
+dnsmasq
 dnsmasq.leases
 macaddress.io-db.json
 dhcpmon.tar.gz
+test.sh

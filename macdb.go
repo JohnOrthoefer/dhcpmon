@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-type OuiJSON struct {
+type OuiEntry struct {
 	OUI     string `json:"oui"`
 	Private bool   `json:"isPrivate"`
 	Company string `json:"companyName"`
@@ -18,37 +18,80 @@ type OuiJSON struct {
 	Updated string `json:"dateUpdated"`
 }
 
-type OuiTable map[string]string
+type OuiTable map[string]*OuiEntry
 
 var cache OuiTable
+var macDB *os.File
 
-func lookupMac(mac string) string {
+func getCompany(i *OuiEntry) string {
+    if i == nil {
+        return "Unknown"
+    }
+    return i.Company
+}
+
+func lookupMac(mac string) *OuiEntry {
 	mac = strings.ToUpper(mac[0:8])
 	val, ok := cache[mac]
 	if ok {
 		return val
 	}
 
-	return "MAC not found"
+    if mac[1] == '2' ||
+       mac[1] == '6' ||
+       mac[1] == 'A' ||
+       mac[1] == 'E' {
+        return cache["PRIVATE"]
+    }
+
+   _, err := macDB.Seek(0,0)
+   checkFatal(err, "macDB can not seek")
+
+   scanner := bufio.NewScanner(macDB)
+   v:=new(OuiEntry)
+   for scanner.Scan() {
+      ln := scanner.Bytes()
+      json.Unmarshal(ln, &v)
+      prefix := strings.ToUpper(v.OUI[0:8])
+      if prefix == mac {
+         cache[prefix] = v
+         return v
+      }
+    }
+
+	return cache["UNKNOWN"]
 }
 
-func initMacs(db string) (int, error) {
-	macDB, err := os.Open(db)
+func initMacs(db string) error {
+    var err error
+	macDB, err = os.Open(db)
 	checkFatal(err, "MAC DB json read")
 
-	defer macDB.Close()
-
-	scanner := bufio.NewScanner(macDB)
-	for scanner.Scan() {
-		var v OuiJSON
-		ln := scanner.Bytes()
-		json.Unmarshal(ln, &v)
-		cache[strings.ToUpper(v.OUI)] = v.Company
-	}
-
-	return len(cache), nil
+	return nil
 }
 
 func init() {
 	cache = make(OuiTable)
+    cache["UNKNOWN"] = &OuiEntry{
+        OUI:        "00:00:00",
+        Private:    false,
+        Company:    "UNKNOWN",
+        Address:    "UNKNOWN",
+        Country:    "",
+        BlockSz:    "",
+        Created:    "",
+        Updated:    "",
+    }
+    cache["PRIVATE"] = &OuiEntry{
+        OUI:        "00:00:00",
+        Private:    true,
+        Company:    "Privacy Mac",
+        Address:    "UNKNOWN",
+        Country:    "",
+        BlockSz:    "",
+        Created:    "",
+        Updated:    "",
+    }
 }
+
+// vim: noai:ts=4:sw=4

@@ -1,5 +1,5 @@
 SRC=check.go httpServer.go lookupEnv.go main.go parseLeases.go startcmd.go config.go macdb.go
-GOLANG=/usr/local/go/bin/go
+GOLANG=/usr/bin/go
 CURL=/usr/bin/curl
 GIT=/usr/bin/git
 REPONAME=$(shell basename `git rev-parse --show-toplevel`)

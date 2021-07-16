@@ -1,28 +1,47 @@
 package main
 
 import (
-   "fmt"
+	"log"
 )
 
-const leasesFile="dnsmasq.leases"
+const (
+	iniFile = "dhcpmon.ini"
+)
+
+var (
+	sha1ver   string
+	buildTime string
+	repoName  string
+)
 
 func main() {
 
-   leasesFile:=lookupEnv("LEASESFILE", "/var/lib/misc/dnsmasq.leases")
-   dnsmasqExec:=lookupEnv("DNSMASQ", "/usr/sbin/dnsmasq")
+	log.Printf("%s: Build %s, Time %s", repoName, sha1ver, buildTime)
 
-   readLeases(leasesFile)
-   go watchLeases(leasesFile)
+	readConfig(iniFile)
+	readEnv()
 
-   go startCmd([]string{
-      dnsmasqExec,
-      "--keep-in-foreground",
-      "--conf-dir=/etc/dnsmasq.d,*conf",
-   })
+	initMacs(lookupStr("macdbfile"))
 
-   fmt.Printf("Leases %d\n", len(GetLeases()))
+	loadTmpl(lookupStr("htmldir"))
 
-   fmt.Printf("Starting HTTP\n")
+	leasesFile := lookupStr("leasesfile")
+	log.Printf("Leases = %s", leasesFile)
+	readLeases(leasesFile)
+	go watchLeases(leasesFile)
 
-   startHTTP()
+	if !lookupBool("systemd") {
+		go startCmd([]string{
+			lookupStr("dnsmasq"),
+			"--keep-in-foreground",
+			"--conf-dir=/etc/dnsmasq.d,*conf",
+		})
+	}
+
+	log.Printf("Leases %d\n", len(GetLeases()))
+	log.Printf("Starting HTTP\n")
+
+	startHTTP()
 }
+
+// vim: noai:ts=4:sw=4

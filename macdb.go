@@ -39,11 +39,15 @@ func lookupMac(mac string) *OuiEntry {
 	    }
     }
 
-    if mac[1] == '2' ||
-       mac[1] == '6' ||
-       mac[1] == 'A' ||
-       mac[1] == 'E' {
-        return cache["PRIVATE"]
+    switch mac[1] {
+    case '2':
+        return cache["PRIVATE-2"]
+    case '6':
+        return cache["PRIVATE-6"]
+    case 'A':
+        return cache["PRIVATE-A"]
+    case 'E':
+        return cache["PRIVATE-E"]
     }
 
    _, err := macDB.Seek(0,0)
@@ -84,10 +88,40 @@ func init() {
         Created:    "",
         Updated:    "",
     }
-    cache["PRIVATE"] = &OuiEntry{
-        OUI:        "00:00:00:00:00:00",
+    cache["PRIVATE-2"] = &OuiEntry{
+        OUI:        "x2:xx:xx:xx:xx:xx",
         Private:    true,
-        Company:    "Privacy Mac",
+        Company:    "Local/Privacy MAC",
+        Address:    "UNKNOWN",
+        Country:    "",
+        BlockSz:    "",
+        Created:    "",
+        Updated:    "",
+    }
+    cache["PRIVATE-6"] = &OuiEntry{
+        OUI:        "x6:xx:xx:xx:xx:xx",
+        Private:    true,
+        Company:    "Local/Privacy MAC",
+        Address:    "UNKNOWN",
+        Country:    "",
+        BlockSz:    "",
+        Created:    "",
+        Updated:    "",
+    }
+    cache["PRIVATE-A"] = &OuiEntry{
+        OUI:        "xA:xx:xx:xx:xx:xx",
+        Private:    true,
+        Company:    "Local/Privacy MAC",
+        Address:    "UNKNOWN",
+        Country:    "",
+        BlockSz:    "",
+        Created:    "",
+        Updated:    "",
+    }
+    cache["PRIVATE-E"] = &OuiEntry{
+        OUI:        "xE:xx:xx:xx:xx:xx",
+        Private:    true,
+        Company:    "Local/Privacy MAC",
         Address:    "UNKNOWN",
         Country:    "",
         BlockSz:    "",

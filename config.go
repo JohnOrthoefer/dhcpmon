@@ -53,13 +53,20 @@ func lookupBool(s string) bool {
 
 func init() {
 	configVars = configTable{
-		"leasesfile": "/var/lib/misc/dnsmasq.leases",
-		"htmldir":    "/app/html",
-		"httplisten": "127.0.0.1:8067",
-		"dnsmasq":    "/usr/sbin/dnsmasq",
-		"systemd":    "False",
-		"macdbfile":  "./macaddress.io-db.json",
+		"leasesfile":   "/var/lib/misc/dnsmasq.leases",
+		"htmldir":      "/app/html",
+		"httplisten":   "127.0.0.1:8067",
+		"dnsmasq":      "/usr/sbin/dnsmasq",
+		"systemd":      "False",
+		"macdbfile":    "/app/macaddress.io-db.json",
+		"macdbpreload": "False",
+		"nmap":         "/usr/bin/nmap",
+		"nmapOpts":     "-oG - -n -F 192.168.12.0/24",
+		"hostsfile":    "/var/lib/misc/hosts",
+		"httplinks":    "true",
+		"httpslinks":   "true",
+		"sshlinks":     "true",
 	}
 }
 
-// vim: noai:ts=4:sw=4
+// vim: noai:ts=4:sw=4:set expandtab:

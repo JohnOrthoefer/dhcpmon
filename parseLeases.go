@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"github.com/fsnotify/fsnotify"
 	"log"
 	"net"
@@ -11,16 +12,47 @@ import (
 )
 
 type DHCPEntry struct {
-	Expire  time.Time
-	Remain  time.Duration
-	MAC     net.HardwareAddr
-	Info    *OuiEntry
-	IP      net.IP
-	Name    string
-	ID      string
+	Expire time.Time        `json:"expire"`
+	Remain time.Duration    `json:"remain"`
+	MAC    net.HardwareAddr `json:"mac"`
+	Info   *OuiEntry
+	IP     net.IP `json:"ip"`
+	Name   string `json:"name"`
+	ID     string `json:"id"`
 }
 
 var dhcpLeases []DHCPEntry
+
+func GetLeasesJson() ([]byte, error) {
+	type DhcpJSON struct {
+		Expire string        `json:"expire"`
+		Remain string        `json:"remain"`
+		Delta  time.Duration `json:"delta"`
+		Mac    string        `json:"mac"`
+		Info   *OuiEntry
+		Ip     string `json:"ip"`
+		IpInt  uint32 `json:"ipSort"`
+		Name   string `json:"name"`
+		Id     string `json:"id"`
+	}
+
+	dj := make([]DhcpJSON, len(dhcpLeases))
+
+	for i, ent := range dhcpLeases {
+		dj[i] = DhcpJSON{
+			Expire: ent.Expire.String(),
+			Remain: ent.Remain.String(),
+			Delta:  ent.Remain,
+			Mac:    ent.MAC.String(),
+			Info:   ent.Info,
+			Ip:     ent.IP.String(),
+			IpInt:  ip2int(ent.IP),
+			Name:   ent.Name,
+			Id:     ent.ID,
+		}
+	}
+	return json.MarshalIndent(dj, "", "  ")
+}
 
 func GetLeases() []DHCPEntry {
 	for i, ent := range dhcpLeases {
@@ -119,3 +151,5 @@ func ParseLeases(l string) []DHCPEntry {
 	}
 	return dhcpLeases
 }
+
+// vim: noai:ts=4:sw=4:set expandtab:

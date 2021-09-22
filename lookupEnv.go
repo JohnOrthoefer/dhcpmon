@@ -1,18 +1,20 @@
 package main
 
 import (
-   "os"
-   "log"
+	"log"
+	"os"
 )
 
 func lookupEnv(e string, d string) string {
-   val := os.Getenv(e)
+	val := os.Getenv(e)
 
-   if val == "" {
-      val = d
-   }
+	if val == "" {
+		val = d
+	}
 
-   log.Printf("%s returns %s\n", e, val)
+	log.Printf("%s returns %s\n", e, val)
 
-   return val
+	return val
 }
+
+// vim: noai:ts=4:sw=4:set expandtab:

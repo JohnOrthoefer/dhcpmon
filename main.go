@@ -36,12 +36,19 @@ func main() {
 			"--keep-in-foreground",
 			"--conf-dir=/etc/dnsmasq.d,*conf",
 		})
+	} else {
+		//		go startCmd([]string{
+		//			"/bin/journalctl",
+		//			"--follow",
+		//			"--unit=dnsmasq.service",
+		//			"--output=json",
+		//		})
 	}
 
 	log.Printf("Leases %d\n", len(GetLeases()))
-	log.Printf("Starting HTTP\n")
+	log.Printf("Starting HTTP, %s\n", lookupStr("httplisten"))
 
 	startHTTP()
 }
 
-// vim: noai:ts=4:sw=4
+// vim: noai:ts=4:sw=4:set expandtab:

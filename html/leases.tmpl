@@ -1,33 +1,52 @@
-<script type="text/javascript">
-  $(document).ready( function () {
-    $('#DHCPLeases').DataTable(
-      {
-        "scrollY":        "60vh",
-        "scrollCollapse": true,
-        "paging":         false
-      }
-    )});
-</script>
+<script type="text/javascript" class="init">
+  $(function () {
+   $('[data-toggle="tooltip"]').tooltip()
+  })
+
+$(document).ready(function () {
+$('#DHCPLeases').DataTable({
+      "pageLength": 50,
+      "scrollY":    "70vh",
+      "scrollCollapse": true,
+      "paging": false,
+      "ajax": {
+        "url": '?api=leases.json',
+        "cache": true
+      },
+      "columns": [ 
+        { "title": "IP Address", "data": ".ipSort",
+          "render": function (data, type, row) { 
+            return row.ip + '<br>'.concat( 
+                {{if .EnableHTTPLinks}}
+                '<a href="http://' + row.ip + '" target="_blank">http</a> ',
+                {{end}}
+                {{if .EnableHTTPSLinks}}
+                '<a href="https://' + row.ip + '" target="_blank">https</a> ',
+                {{end}}
+                {{if .EnableSSHLinks}}
+                '<a href="ssh://' + row.ip + '" target="_blank">ssh</a> ',
+                {{end}}
+              "")
+          }
+        },
+        { "title": "Name", "data": ".name"},
+        { "title": "MAC", "data": ".mac",
+          "render": function (data, type, row) { 
+            return '<span data-toggle="tooltip" title="' + row.Info.oui + '&#10;' + row.Info.companyName + '">' +
+              row.mac + '</span>'
+          }
+        },
+        { "title": "Expire", "data": ".delta", 
+          "render": function (data, type, row) { return row.expire + '<br>' + row.remain }
+        }
+      ]
+    });
+
+  //setInterval( function() {$('#DHCPLeases').DataTable().ajax.reload(); }, 5000);
+  });
+</script> 
 
 <table id="DHCPLeases" class="table table-striped" style="width:90%">
-  <thead>
-    <tr>
-      <th>IP</th>
-      <th>Name</th>
-      <th>MAC</th>
-      <th>Remaing Time</th>
-      <th>Expire</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{range .}}
-    <tr>
-      <td>{{.IP}}</td>
-      <td>{{.Name}}</td>
-      <td data-toggle="tooltip" title="{{.Info.Company}}&#10;{{.Info.OUI}}">{{.MAC}}</td>
-      <td>{{.Remain}}</td>
-      <td>{{.Expire}}</td>
-    </tr>
-    {{end}}
-  </tbody>
 </table>
+
+<!-- vim: noai:ts=2:sw=2:set expandtab: -->

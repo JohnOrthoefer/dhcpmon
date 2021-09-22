@@ -1,5 +1,6 @@
-SRC=check.go httpServer.go lookupEnv.go main.go parseLeases.go startcmd.go config.go macdb.go
-GOLANG=/usr/bin/go
+SRC=check.go httpServer.go lookupEnv.go main.go parseLeases.go startcmd.go config.go macdb.go parseHosts.go
+GOLANG=/usr/local/go/bin/go
+#GOLANG=/usr/bin/go
 CURL=/usr/bin/curl
 GIT=/usr/bin/git
 REPONAME=$(shell basename `git rev-parse --show-toplevel`)
@@ -22,7 +23,7 @@ update-json:
 	${CURL} -O https://macaddress.io/database/macaddress.io-db.json
 
 clean:
-	rm dhcpmon dhcpmon.tar.gz
+	rm -f dhcpmon dhcpmon.tar.gz
 
 archive:
 	${GIT} archive --format=tar.gz  --prefix=dhcpmon/ HEAD > dhcpmon.tar.gz

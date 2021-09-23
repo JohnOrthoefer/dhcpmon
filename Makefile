@@ -1,13 +1,13 @@
 SRC=check.go httpServer.go lookupEnv.go main.go parseLeases.go startcmd.go config.go macdb.go parseHosts.go
-GOLANG=/usr/local/go/bin/go
-#GOLANG=/usr/bin/go
+#GOLANG=/usr/local/go/bin/go
+GOLANG=/usr/bin/go
 CURL=/usr/bin/curl
 GIT=/usr/bin/git
 REPONAME=$(shell basename `git rev-parse --show-toplevel`)
 SHA1=$(shell git rev-parse --short HEAD)
 NOW=$(shell date +%Y-%m-%d_%T)
-export HTTP_PROXY=http://llproxy.llan.ll.mit.edu:8080
-export HTTPS_PROXY=${HTTP_PROXY}
+#export HTTP_PROXY=http://llproxy.llan.ll.mit.edu:8080
+#export HTTPS_PROXY=${HTTP_PROXY}
 
 dhcpmon: ${SRC}
 	echo ${REPONAME}

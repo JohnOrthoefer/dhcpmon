@@ -1,0 +1,62 @@
+#Net 172.17.2
+172.17.2.6	kara.orthoefer.org kara
+172.17.2.10	Batgirl.orthoefer.org Batgirl
+172.17.2.11	Supergirl.orthoefer.org Supergirl
+172.17.2.12	Catwoman.orthoefer.org Catwoman
+172.17.2.14	Zari.orthoefer.org Zari
+172.17.2.15	Hawkgirl.orthoefer.org Hawkgirl
+172.17.2.16	WhiteCanary.orthoefer.org WhiteCanary
+172.17.2.17	Starheart.orthoefer.org Starheart
+172.17.2.18	sw-Office.lan.orthoefer.org sw-Office
+172.17.2.19	collectd.orthoefer.org collectd
+172.17.2.20	EmmaFrost.orthoefer.org EmmaFrost
+172.17.2.22	ssh.orthoefer.org
+172.17.2.25	smtp.orthoefer.org
+172.17.2.29	Oracle.orthoefer.org Oracle
+172.17.2.35	Belle.lan.Orthoefer.org Belle
+172.17.2.36	Ariel.lan.orthoefer.org Ariel
+172.17.2.37	sw-LivingRm.lan.Orthoefer.org sw-LivingRm
+172.17.2.40	sw-Core.lan.orthoefer.org sw-Core
+172.17.2.42	Giselle.lan.orthoefer.org Giselle
+172.17.2.44	Gamora.lan.Orthoefer.org Gamora
+172.17.2.45	Nebula.lan.orthoefer.org Nebula
+172.17.2.46	sw-Basement.lan.orthoefer.org sw-Basement
+172.17.2.47	Shuri.lan.orthoefer.org Shuri.orthoefer.org Shuri
+172.17.2.48	Shuri-backup.lan.orthoefer.org Shuri-backup
+172.17.2.49	WhiteQueen.lan.orthoefer.org WhiteQueen
+172.17.2.50	DocOct.lan.orthoefer.org
+172.17.2.51	HarleyQuinn.orthoefer.org HarleyQuinn
+172.17.2.53	dns.orthoefer.org dns pi.hole
+172.17.2.64	wireguard.orthoefer.org openvpn.orthoefer.org
+172.17.2.67	dhcp.orthoefer.org dhcp
+172.17.2.81	wpad.orthoefer.org
+172.17.2.123	ntp.orthoefer.org ntp
+172.17.2.153	cloudflare.orthoefer.org cloudflare
+172.17.2.245	ap-Kitchen.lan.orthoefer.org ap-Kitchen
+172.17.2.246	ap-Outdoor.lan.orthoefer.org ap-Outdoor ap-shed.orthoefer.org ap-shed
+172.17.2.247	sw-Kitchen.lan.orthoefer.org sw-Kitchen
+172.17.2.248	sw-Attic.lan.orthoefer.org sw-Attic
+172.17.2.249	ap-Attic.lan.orthoefer.org ap-Attic
+172.17.2.250	sw-pibox.lan.orthoefer.org sw-pibox
+172.17.2.252	sw-office-poe.lan.orthoefer.org sw-office-poe
+172.17.2.253	ap-basement.lan.orthoefer.org ap-basement
+172.17.2.254	router.lan.orthoefer.org router
+
+#Net 172.17.4
+172.17.4.10	Amanda.Media.Orthoefer.org Amanda
+172.17.4.47	Shuri.Media.orthoefer.org Shuri Shuri-igb1
+172.17.4.53	Storm.orthoefer.org Storm.Media.Orthoefer.org Storm
+172.17.4.254	router.Media.orthoefer.org router
+
+#Net 172.31.31
+172.31.31.13	Sigrun.orthoefer.org Sigrun
+172.31.31.31	Jasmine.orthoefer.org Jasmine
+172.31.31.47	Shuri.Security.orthoefer.org 
+172.31.31.240	ap-office.orthoefer.org ap-office
+172.31.31.251   sw-core1.orthoefer.org sw-core1
+172.31.31.252   sw-core2.orthoefer.org sw-core2
+172.31.31.254	router.Security.orthoefer.org router
+
+#Net 192.168.0
+192.168.0.1	router.VZ.Orthoefer.org router
+192.168.0.12	Rapunzel.VZ.Orthoefer.org Rapunzel

@@ -5,7 +5,17 @@ import (
 	//	"log"
 	"os"
 	"strings"
+    "unicode"
 )
+
+const commentChars = "#;"
+
+func stripComment(source string) string {
+	if cut := strings.IndexAny(source, commentChars); cut >= 0 {
+		return strings.TrimRightFunc(source[:cut], unicode.IsSpace)
+	}
+	return source
+}
 
 func GetHostsJson() ([]byte, error) {
 	type HostsJSON struct {
@@ -17,10 +27,11 @@ func GetHostsJson() ([]byte, error) {
 	var hj []HostsJSON
 
 	for _, line := range strings.Split(readHosts(lookupStr("hostsfile")), "\n") {
-		if line == "" {
+        tline := stripComment(strings.TrimSpace(line))
+		if tline == "" {
 			continue
 		}
-		ent := strings.Fields(line)
+		ent := strings.Fields(tline)
 		e := HostsJSON{
 			Ip:    ent[0],
 			Name:  ent[1],

@@ -41,7 +41,7 @@ func GetLeasesJson() ([]byte, error) {
 	for i, ent := range dhcpLeases {
 		dj[i] = DhcpJSON{
 			Expire: ent.Expire.String(),
-			Remain: ent.Remain.String(),
+			Remain: ent.Remain.Round(time.Second).String(),
 			Delta:  ent.Remain,
 			Mac:    ent.MAC.String(),
 			Info:   ent.Info,

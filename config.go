@@ -66,6 +66,7 @@ func init() {
 		"httplinks":    "true",
 		"httpslinks":   "true",
 		"sshlinks":     "true",
+        "staticfile":   "/etc/dnsmasq.d/static.conf",
 	}
 }
 

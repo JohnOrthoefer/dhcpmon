@@ -25,6 +25,8 @@ func main() {
 
 	loadTmpl(lookupStr("htmldir"))
 
+    log.Printf("Static = %s", lookupStr("staticfile"))
+
 	leasesFile := lookupStr("leasesfile")
 	log.Printf("Leases = %s", leasesFile)
 	readLeases(leasesFile)

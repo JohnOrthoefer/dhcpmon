@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/fsnotify/fsnotify"
 	"log"
+    "bufio"
 	"net"
 	"os"
 	"strconv"
@@ -34,6 +35,8 @@ func GetLeasesJson() ([]byte, error) {
 		IpInt  uint32 `json:"ipSort"`
 		Name   string `json:"name"`
 		Id     string `json:"id"`
+        Tag    string `json:"tag"`
+        Static bool `json:"static"`
 	}
 
 	dj := make([]DhcpJSON, len(dhcpLeases))
@@ -49,8 +52,57 @@ func GetLeasesJson() ([]byte, error) {
 			IpInt:  ip2int(ent.IP),
 			Name:   ent.Name,
 			Id:     ent.ID,
+            Static: false,
 		}
 	}
+
+    if lookupStr("staticfile") != "" {
+	    staticAddr, err := os.Open(lookupStr("staticfile"))
+	    checkFatal(err, "staticfile")
+        scanner := bufio.NewScanner(staticAddr)
+        for scanner.Scan() {
+            txt := strings.TrimSpace(scanner.Text())
+            if txt == "" {
+                continue
+            }
+            cmd := strings.Split(txt, "=")
+            if strings.ToLower(cmd[0]) != "dhcp-host" {
+                continue
+            }
+            var newStatic DhcpJSON
+            val := strings.Split(cmd[1], ",")
+            log.Printf("%d %q\n", len(val), val)
+            i := 0
+            v := val[i]
+            // first entry needs to be MAC Address
+            m, err := net.ParseMAC(v)
+            if err != nil {
+                // no support for id: ... yet
+                continue
+            }
+            newStatic.Mac = m.String()
+            newStatic.Info = lookupMac(newStatic.Mac)
+            for {
+                i+=1
+                v = val[i]
+                if net.ParseIP(v) != nil {
+                    break
+                }
+            }
+            newStatic.Ip = v
+            newStatic.IpInt = ip2int(net.ParseIP(v))
+            i+=1
+            v = val[i]
+            newStatic.Name = v
+            newStatic.Id = v
+            newStatic.Expire = "Never"
+            newStatic.Delta,_ = time.ParseDuration("99h59m59s")
+            newStatic.Remain = newStatic.Delta.String()
+            newStatic.Static = true
+            dj = append(dj, newStatic)
+        }
+    }
+
 	return json.MarshalIndent(dj, "", "  ")
 }
 
@@ -66,6 +118,7 @@ func readLeases(f string) {
 	checkFatal(err, f)
 
 	ParseLeases(string(leases))
+    
 }
 
 func watchLeases(f string) {
@@ -120,7 +173,6 @@ func ParseLeases(l string) []DHCPEntry {
 				v, _ := strconv.ParseInt(ent, 10, 64)
 				e.Expire = time.Unix(v, 0)
 				e.Remain = time.Until(e.Expire)
-				//            fmt.Printf("%v ", time.Until(e.Expire).Truncate(time.Second).String())
 			// MAC Address
 			case 1:
 				v, _ := net.ParseMAC(ent)

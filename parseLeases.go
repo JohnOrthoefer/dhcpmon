@@ -37,6 +37,7 @@ func GetLeasesJson() ([]byte, error) {
 		Id     string `json:"id"`
         Tag    string `json:"tag"`
         Static bool `json:"static"`
+        Ignore bool `json:"ignore"`
 	}
 
 	dj := make([]DhcpJSON, len(dhcpLeases))
@@ -71,7 +72,6 @@ func GetLeasesJson() ([]byte, error) {
             }
             var newStatic DhcpJSON
             val := strings.Split(cmd[1], ",")
-            log.Printf("%d %q\n", len(val), val)
             i := 0
             v := val[i]
             // first entry needs to be MAC Address
@@ -82,23 +82,31 @@ func GetLeasesJson() ([]byte, error) {
             }
             newStatic.Mac = m.String()
             newStatic.Info = lookupMac(newStatic.Mac)
-            for {
+            i += 1
+            v = val[i]
+            tagVal := strings.Split(strings.ToLower(v), ":")
+            if len(tagVal) == 2 && (tagVal[0] == "set" || tagVal[0] == "tag") {
+                newStatic.Tag = tagVal[1]
                 i+=1
                 v = val[i]
-                if net.ParseIP(v) != nil {
-                    break
-                }
             }
-            newStatic.Ip = v
-            newStatic.IpInt = ip2int(net.ParseIP(v))
-            i+=1
-            v = val[i]
+            if net.ParseIP(v) != nil {
+                newStatic.Ip = v
+                newStatic.IpInt = ip2int(net.ParseIP(v))
+                i+=1
+                v = val[i]
+            }
             newStatic.Name = v
             newStatic.Id = v
-            newStatic.Expire = "Never"
-            newStatic.Delta,_ = time.ParseDuration("99h59m59s")
-            newStatic.Remain = newStatic.Delta.String()
+            i+=1
+            if i < len(val) {
+            } else {
+                newStatic.Expire = "Never"
+                newStatic.Delta,_ = time.ParseDuration("99h59m59s")
+                newStatic.Remain = "Infinite"
+            }
             newStatic.Static = true
+            newStatic.Ignore = false
             dj = append(dj, newStatic)
         }
     }

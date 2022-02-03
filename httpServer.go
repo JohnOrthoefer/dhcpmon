@@ -14,6 +14,8 @@ type HTMLOptions struct {
 	EnableHTTPLinks  bool
 	EnableHTTPSLinks bool
 	EnableSSHLinks   bool
+	EnableNetworkTags   bool
+	EnableEdit   bool
 }
 
 var TMPLs tmplMap
@@ -31,6 +33,8 @@ func dhcpTable() string {
 		lookupBool("httplinks"),
 		lookupBool("httpslinks"),
 		lookupBool("sshlinks"),
+		lookupBool("networktags"),
+		lookupBool("edit"),
 	})
 	return rtn.String()
 }
@@ -62,6 +66,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	urlPath := r.URL.String()
 	urlQuery := r.URL.Query()
 	log.Printf("Request from %s: url=%v query=%v\n", r.Host, urlPath, urlQuery)
+    log.Printf("Body: %v\n", r.FormValue("data"))
 
 	if v, found := urlQuery["api"]; found {
 		log.Printf("API = %v\n", v[0])
